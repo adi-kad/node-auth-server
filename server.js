@@ -7,7 +7,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 
 mongoose.connect(process.env.MONGO_CONNECTION_URL, {
-	useNewUrlParser: true,
+    useNewUrlParser: true,
 	useUnifiedTopology: true
 })
 
