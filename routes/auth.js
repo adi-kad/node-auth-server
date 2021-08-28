@@ -24,7 +24,6 @@ router.post('/register', async (req, res) => {
             email: email,
             password: hashedPassword
         });
-        console.log("User created succesfully", user);
 
         //assign tokens to user
         const accessToken = createAccessToken(user);
@@ -38,7 +37,6 @@ router.post('/register', async (req, res) => {
         const refToken = new Token({token: refreshToken});
         await refToken.save();
     } catch (error) {
-        console.log(error);
         return res.status(400).json(error.message);        
     }
 })
@@ -60,10 +58,10 @@ router.post('/login', async (req, res) => {
                 user: user._id,                
                 accessToken: accessToken,
                 refreshToken: refreshToken
-            });                             
+            });  
+            
             const refToken = new Token({token: refreshToken});
             await refToken.save();
-            console.log("Login reftoken "+ refToken.token);
         } else { 
             return res.status(400).json({message: "Email or password is incorrect."});
         }    
@@ -107,7 +105,6 @@ router.post('/logout', async (req, res) => {
     const refreshToken = req.body.refreshToken;
     try {
         //Removing refresh token when user logs out
-        console.log("token is +" + refreshToken);
         await Token.findOneAndDelete({ token: refreshToken });
         res.status(200).json("User logged out successfully");
     } catch (error) {
