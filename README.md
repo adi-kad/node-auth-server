@@ -1,2 +1,2 @@
 # node-auth
-Node authentication with JWT and MongoDB
+Node.js authentication with JWT and MongoDB
