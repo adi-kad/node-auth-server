@@ -19,7 +19,6 @@ exports.verifyAuth = (req, res, next) => {
     try {
         const verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);        
         req.user = verified.user;
-        console.log(req.user);
         next();
     } catch (err) {
         return res.status(400).json(err);
