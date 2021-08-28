@@ -17,16 +17,16 @@ exports.register = async (req, res) => {
             password: hashedPassword
         });
 
-        //assign tokens to user and store refresh token in collection
+        //assign tokens to user
         const accessToken = createAccessToken(user);
-        const refreshToken = createRefreshToken(user);
-        await new Token({token: refreshToken}).save();
-       
+        const refreshToken = createRefreshToken(user);         
         res.status(200).json({
             user,
             accessToken: accessToken,
             refreshToken: refreshToken
         });      
+        //save new refresh token to collection
+        await new Token({token: refreshToken}).save();
     } catch (error) {
         return res.status(400).json(error.message);        
     }
@@ -41,16 +41,16 @@ exports.login = async (req, res) => {
         }
         //if user enters valid password
         if (await bcrypt.compare(password, user.password)) {        
-            //assign tokens and store refresh token in collection
+            //assign tokens
             const accessToken = createAccessToken(user);
-            const refreshToken = createRefreshToken(user);
-            await new Token({token: refreshToken}).save();
- 
+            const refreshToken = createRefreshToken(user);           
             res.status(200).json({
                 user: user._id,                
                 accessToken: accessToken,
                 refreshToken: refreshToken
-            });                        
+            });        
+            //save refresh token to collection
+            await new Token({token: refreshToken}).save();
         } else { 
             return res.status(400).json({message: "Email or password is incorrect."});
         }    
@@ -77,15 +77,15 @@ exports.refresh =  async (req, res) => {
         }
         //delete old refresh token
         await Token.findOneAndDelete({token: refToken.token })        
-        //assign new tokens and store new refresh token in collection
+        //assign new tokens
         const newAccessToken = createAccessToken(user);
-        const newRefreshToken = createRefreshToken(user);
-        await new Token({token: newRefreshToken}).save();
-
+        const newRefreshToken = createRefreshToken(user);        
         res.status(200).json({
             accessToken: newAccessToken,
             refreshToken: newRefreshToken
         });    
+        //save new refresh token
+        await new Token({token: newRefreshToken}).save();
     });    
 }
 
