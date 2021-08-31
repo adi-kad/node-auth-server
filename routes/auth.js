@@ -12,7 +12,7 @@ router.post('/logout', AuthController.logout);
 
 //Protected route for testing verification
 router.get('/protected', verifyAuth, (req, res) => {
-   res.send("protected stuff");
+   res.json("protected stuff");
 })
 
 module.exports = router;
