@@ -5,7 +5,7 @@ const Token = require('../models/token');
 const {createAccessToken, createRefreshToken} = require('../controllers/TokenController');
 
 exports.register = async (req, res) => {
-    const {email, password} = req.body;
+    const {firstName, lastName, email, password} = req.body;
 
     // hash password
     const salt = await bcrypt.genSalt();
@@ -13,6 +13,8 @@ exports.register = async (req, res) => {
 
     try {
         const user = await User.create({
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             password: hashedPassword
         });
